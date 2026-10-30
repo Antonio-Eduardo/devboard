@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCompanyRequest;
+use App\Http\Resources\CompanyResource;
 use App\Models\Company;
 use Illuminate\Http\Request;
 
@@ -19,14 +20,14 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCompanyRequest $request)
+    public function store(StoreCompanyRequest $request) : CompanyResource
     {
         $data = $request->validated();
-        if ($request->hasFile('logo')) {
-            $data[`logo_path`] = $request->file('logo_path')->store('logos', 'public');
+        if ($request->hasFile('logo_path')) {
+            $data['logo_path'] = $request->file('logo_path')->store('logos', 'public');
         }
         $company = $request->user()->companies()->create($data);
-        return response()->json($company, 201);
+        return new CompanyResource($company);
     }
 
     /**

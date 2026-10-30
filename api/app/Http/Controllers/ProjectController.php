@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProjectRequest;
+use App\Http\Resources\ProjectResource;
 use App\Models\Project;
 use Illuminate\Http\Request;
 
@@ -19,11 +20,11 @@ class ProjectController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProjectRequest $request)
+    public function store(StoreProjectRequest $request) : ProjectResource
     {
         $data = $request->validated();
         $project = $request->user()->companies()->create($data);
-        return response()->json($project, 201);
+        return new ProjectResource($project);
     }
 
     /**
