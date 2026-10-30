@@ -25,7 +25,7 @@ class StoreTaskRequest extends FormRequest
     {
         return [
             'project_id' => ['required', 'integer',
-                Rule::exists('projects', 'id')->whereIn('company_id', $this->user()->company_id->select('id')),],
+                Rule::exists('projects', 'id')->whereIn('company_id', $this->user()->companies()->pluck('id')),],
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:5000',
             'status' => 'sometimes|in:todo,in_progress,done',
